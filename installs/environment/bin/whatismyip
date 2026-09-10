@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -eu
+
+curl -4fsS https://ifconfig.co/ip

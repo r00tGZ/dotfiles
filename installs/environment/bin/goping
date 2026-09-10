@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -eu
+
+ping -i 2 google.com | while IFS= read -r line; do
+    printf '%s --> %s\n' "$(date '+%H:%M:%S')" "$line"
+done

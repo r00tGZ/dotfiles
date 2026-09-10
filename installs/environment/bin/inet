@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -eu
+
+ip -o -4 address show | awk '{print $4}'
