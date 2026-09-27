@@ -9,7 +9,7 @@ Use a regular account with working `sudo`. On a preseeded VM, run `passwd` first
 ```sh
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl git
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/r00tGZ/dotfiles/master/init.sh)"
+curl -fsSL https://raw.githubusercontent.com/r00tGZ/dotfiles/master/init.sh | sh
 dotfiles install all
 ```
 
