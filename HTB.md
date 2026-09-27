@@ -4,7 +4,7 @@ Run on the host with the VM's installer boot-parameter line open for editing. In
 
 ```sh
 VBoxManage controlvm "Kali" keyboardputstring \
-  " auto=true priority=critical interface=auto hostname=kali domain= url=https://raw.githubusercontent.com/r00tGZ/dotfiles/master/preseeds/kali-vm.cfg"
+  " auto=true priority=critical language=en country=ES locale=en_US.UTF-8 keymap=es interface=auto hostname=kali domain= url=https://raw.githubusercontent.com/r00tGZ/dotfiles/master/preseeds/kali-vm.cfg"
 ```
 
 ### Dotfiles
