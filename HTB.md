@@ -11,7 +11,7 @@ VBoxManage controlvm "Kali" keyboardputstring \
 
 Run inside the installed VM as `toor`. First run `passwd` to replace the public bootstrap password.
 
-```sh
+```zsh
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl git
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/r00tGZ/dotfiles/master/init.sh)"
@@ -23,10 +23,13 @@ dotfiles profile kali-htb
 
 ###### Configurations
 
+- Cherrytree + file
+- Delete `~/.bash_history` and `~/.zsh_history`
+- Native terminal
+- OpenVPN GUI?
 - Power & Sound
-- Terminal
-- Cherrytree + file (Kali)
-- OpenVPN GUI? (Kali)
+- VBox remaining configs (e.g. clipboard)
+- VPN config file on /etc
 
 ###### Awakenings
 
