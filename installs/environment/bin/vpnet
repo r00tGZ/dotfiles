@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -eu
+
+[ "$(id -u)" -eq 0 ] || { echo "Error: root required" >&2; exit 1; }
+
+LOCATION='/root'
+set -- "$LOCATION"/*.ovpn
+
+[ -e "$1" ] || { echo "Error: no .ovpn file found" >&2; exit 1; }
+[ "$#" -eq 1 ] || { echo "Error: multiple .ovpn files found" >&2; exit 1; }
+
+printf '[*] %s\n\n' "$1"
+exec openvpn --config "$1"

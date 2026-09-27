@@ -1,0 +1,61 @@
+#!/bin/sh
+
+set -eu
+
+etchosts='/etc/hosts'
+bashrc="$HOME/.bashrc"
+zshrc="$HOME/.zshrc"
+
+comment_slug='# HTB'
+alias_slug='IP'
+
+case $# in
+    0)
+        grep -F "$comment_slug" "$etchosts"
+        ;;
+
+    1)
+        if [ "$1" = "-" ]; then
+            sudo sed -i "\|$comment_slug|d" "$etchosts"
+            for rc in "$bashrc" "$zshrc"; do
+                [ -f "$rc" ] && sed -i "\|$comment_slug|d" "$rc"
+            done
+
+        else
+            echo "Usage: $(basename "$0") [IP HOST [HOST...]] | -" >&2
+            exit 1
+
+        fi
+        ;;
+
+    *)
+        ip=$1
+        shift
+
+        if ! python3 -c 'import ipaddress, sys; ipaddress.ip_address(sys.argv[1]); sys.exit("%" in sys.argv[1])' "$ip" 2>/dev/null; then
+            echo "Invalid IP address: $ip (expected IPv4 or unscoped IPv6)." >&2
+            exit 1
+        fi
+        for host do
+            case "$host" in
+                ''|*[!A-Za-z0-9.-]*)
+                    echo "Invalid hostname: $host" >&2
+                    exit 1
+                    ;;
+            esac
+        done
+
+        grep -qF "$comment_slug" "$etchosts" && echo "Warning: existing HTB entry will be replaced." >&2
+
+        sudo sed -i "\|$comment_slug|d" "$etchosts"
+        printf '%s\t%s\t%s\n' "$ip" "$*" "$comment_slug" | sudo tee -a "$etchosts" >/dev/null
+
+        for rc in "$bashrc" "$zshrc"; do
+            if [ -f "$rc" ]; then
+                sed -i "\|$comment_slug|d" "$rc"
+                printf "export %s='%s'\t%s\n" "$alias_slug" "$ip" "$comment_slug" >>"$rc"
+            fi
+
+        done
+        ;;
+esac

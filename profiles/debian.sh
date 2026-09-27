@@ -7,7 +7,3 @@ install -d -m 0755 -o toor -g "$(id -gn toor)" /toor
 apt update -y
 apt autoclean -y
 apt autoremove -y
-
-if getent group wireshark >/dev/null 2>&1; then
-    usermod -aG wireshark toor
-fi

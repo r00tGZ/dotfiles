@@ -13,6 +13,7 @@ installations=(
     'configs:link managed config files'
 )
 profiles=(
+    'debian:apply the Debian profile'
     'kali-htb:apply the Hack The Box profile'
     'kali-off:apply the daily-work profile'
 )

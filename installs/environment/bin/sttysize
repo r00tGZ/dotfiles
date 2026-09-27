@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -eu
+
+size=$(stty size 2>/dev/null)
+rows=$(echo "$size" | cut -d' ' -f1)
+cols=$(echo "$size" | cut -d' ' -f2)
+
+echo "stty rows $rows cols $cols"

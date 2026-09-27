@@ -6,7 +6,7 @@ usage() {
     cat >&2 <<'EOF'
 Usage:
   dotfiles install <all|environment|software|configs>
-  dotfiles profile <kali-htb|kali-off>
+    dotfiles profile <profile>
 EOF
 }
 
@@ -121,7 +121,19 @@ case "$command:$selection" in
             exit 1
         fi
         ;;
-    profile:kali-htb|profile:kali-off) ;;
+    profile:*)
+        case "$selection" in
+            ''|*[!A-Za-z0-9-]*)
+                usage
+                exit 2
+                ;;
+        esac
+        if [ ! -f "$DOTFILES_DIRECTORY/profiles/$selection.sh" ]; then
+            echo "Unknown profile: $selection" >&2
+            usage
+            exit 2
+        fi
+        ;;
     *)
         usage
         exit 2

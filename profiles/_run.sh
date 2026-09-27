@@ -3,7 +3,7 @@
 set -eu
 
 usage() {
-    echo "Usage: dotfiles profile <kali-htb|kali-off>" >&2
+    echo "Usage: dotfiles profile <profile>" >&2
 }
 
 if [ "$#" -ne 1 ]; then
@@ -11,38 +11,28 @@ if [ "$#" -ne 1 ]; then
     exit 2
 fi
 
-case "$1" in
-    kali-htb|kali-off) profile=$1 ;;
-    *)
+profile=$1
+case "$profile" in
+    ''|*[!A-Za-z0-9-]*)
         usage
         exit 2
         ;;
 esac
+
+PROFILE_DIRECTORY=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+profile_script="$PROFILE_DIRECTORY/$profile.sh"
+
+if [ ! -f "$profile_script" ]; then
+    echo "Unknown profile: $profile" >&2
+    usage
+    exit 2
+fi
 
 if [ "$(id -u)" -ne 0 ]; then
     echo "Run this script as root." >&2
     exit 1
 fi
 
-if [ ! -r /etc/os-release ]; then
-    echo "Cannot identify this system." >&2
-    exit 1
-fi
-
-. /etc/os-release
-if [ "${ID:-}" != kali ]; then
-    echo "This profile requires Kali Linux." >&2
-    exit 1
-fi
-
-if ! id toor >/dev/null 2>&1; then
-    echo "User toor does not exist." >&2
-    exit 1
-fi
-
-PROFILE_DIRECTORY=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-
-sh "$PROFILE_DIRECTORY/kali-base.sh"
-sh "$PROFILE_DIRECTORY/$profile.sh"
+sh "$profile_script"
 
 echo "Profile '$profile' complete."

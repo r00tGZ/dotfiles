@@ -1,12 +1,11 @@
 7zip
 autojump
-build-essential
 ca-certificates
 curl
 gettext
 git
 iputils-ping
-lynis
+jq
 ncat
 pwgen
 python3
@@ -14,7 +13,6 @@ python3-pip
 sudo
 tmux
 tree
-ufw
 unzip
 vim
 wget
