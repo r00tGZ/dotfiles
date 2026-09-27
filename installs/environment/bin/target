@@ -8,6 +8,7 @@ zshrc="$HOME/.zshrc"
 
 comment_slug='# HTB'
 alias_slug='IP'
+ipv4_regex='^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$'
 
 case $# in
     0)
@@ -32,7 +33,7 @@ case $# in
         ip=$1
         shift
 
-        if ! python3 -c 'import ipaddress, sys; ipaddress.ip_address(sys.argv[1]); sys.exit("%" in sys.argv[1])' "$ip" 2>/dev/null; then
+		if ! printf '%s\n' "$ip" | grep -Eq "$ipv4_regex"; then
             echo "Invalid IP address: $ip (expected IPv4 or unscoped IPv6)." >&2
             exit 1
         fi
