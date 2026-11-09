@@ -1,0 +1,3 @@
+vim.conf	.vimrc
+tmux.conf	.tmux.conf
+ruff.toml	.config/ruff/ruff.toml

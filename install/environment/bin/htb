@@ -1,0 +1,62 @@
+#!/bin/sh
+
+set -eu
+
+etchosts='/etc/hosts'
+bashrc="$HOME/.bashrc"
+zshrc="$HOME/.zshrc"
+
+comment_slug='# HTB'
+host_entry="^[0-9.][0-9.]*[[:blank:]].*[[:blank:]]$comment_slug$"
+ip_export="^export IP='[0-9.]*'[[:blank:]]$comment_slug$"
+ipv4_regex='^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$'
+
+case $# in
+    0)
+        grep "$host_entry" "$etchosts"
+        ;;
+
+    1)
+        if [ "$1" = "-" ]; then
+            sudo sed -i "/$host_entry/d" "$etchosts"
+            for rc in "$bashrc" "$zshrc"; do
+                if [ -f "$rc" ]; then
+                    sed -i "/$ip_export/d" "$rc"
+                fi
+            done
+        else
+            echo "Usage: $(basename "$0") [IP HOST [HOST...]] | -" >&2
+            exit 1
+        fi
+        ;;
+
+    *)
+        ip=$1
+        shift
+
+        if ! printf '%s\n' "$ip" | grep -Eq "$ipv4_regex"; then
+            echo "Invalid IPv4 address: $ip" >&2
+            exit 1
+        fi
+        for host do
+            case "$host" in
+                ''|*[!A-Za-z0-9.-]*)
+                    echo "Invalid hostname: $host" >&2
+                    exit 1
+                    ;;
+            esac
+        done
+
+        grep -q "$host_entry" "$etchosts" && echo "Warning: existing HTB entry will be replaced." >&2
+
+        sudo sed -i "/$host_entry/d" "$etchosts"
+        printf '%s\t%s\t%s\n' "$ip" "$*" "$comment_slug" | sudo tee -a "$etchosts" >/dev/null
+
+        for rc in "$bashrc" "$zshrc"; do
+            if [ -f "$rc" ]; then
+                sed -i "/$ip_export/d" "$rc"
+                printf "export IP='%s'\t%s\n" "$ip" "$comment_slug" >>"$rc"
+            fi
+        done
+        ;;
+esac
