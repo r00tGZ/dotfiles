@@ -15,10 +15,12 @@ if getent group wireshark >/dev/null 2>&1; then
     usermod -aG wireshark toor
 fi
 
-updatedb
 searchsploit -u
 
 wget https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh -O /opt/linpeas.sh
-wget https://github.com/itm4n/PrivescCheck/releases/latest/download/PrivescCheck.ps1 -O /opt/PrivescCheck.ps1
+wget https://raw.githubusercontent.com/peass-ng/PEASS-ng/refs/heads/master/winPEAS/winPEASbat/winPEAS.bat -O /opt/winpeas.bat
+wget https://raw.githubusercontent.com/peass-ng/PEASS-ng/refs/heads/master/winPEAS/winPEASps1/winPEAS.ps1 -O /opt/winpeas.ps1
 
 j -a /box -i 1000
+
+updatedb
