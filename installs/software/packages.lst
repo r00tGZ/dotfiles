@@ -2,6 +2,8 @@
 autojump
 ca-certificates
 curl
+geany
+geany-plugin-treebrowser
 gettext
 git
 iputils-ping
