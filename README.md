@@ -4,7 +4,7 @@ Personal Debian and Kali shell tools, config files, and APT package lists.
 
 ## Install
 
-Run as a regular user with sudo access from the directory that should contain `dotfiles/`.
+Run as root or as a regular user with sudo access from the directory that should contain `dotfiles/`. When running as root, omit `sudo` from the commands below and use a checkout only root can modify.
 
 ```sh
 sudo apt-get update

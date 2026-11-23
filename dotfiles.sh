@@ -79,8 +79,10 @@ install_software() {
     set -f
     set -- $packages
     [ "$#" -gt 0 ] || return 0
-    sudo apt-get update
-    sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y "$@"
+    as_root=
+    [ "$(id -u)" -eq 0 ] || as_root=sudo
+    $as_root apt-get update
+    $as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y "$@"
 }
 
 case ${1-} in
@@ -104,11 +106,6 @@ case ${1-} in
         ;;
     *) install_options >&2; exit 2 ;;
 esac
-
-if [ "$(id -u)" -eq 0 ]; then
-    echo "Run 'dotfiles install' as the regular user." >&2
-    exit 1
-fi
 
 case $1 in
     conf) install_configs ;;

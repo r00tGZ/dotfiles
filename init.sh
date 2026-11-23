@@ -2,8 +2,8 @@
 
 set -eu
 
-if [ "$#" -ne 0 ] || [ "$(id -u)" -eq 0 ]; then
-    echo "Run init.sh without arguments as the regular user." >&2
+if [ "$#" -ne 0 ]; then
+    echo "Run init.sh without arguments." >&2
     exit 1
 fi
 
@@ -14,12 +14,15 @@ else
     git clone --depth 1 --branch core https://github.com/r00tGZ/dotfiles.git "$checkout"
 fi
 
+as_root=
+[ "$(id -u)" -eq 0 ] || as_root=sudo
+
 install_link() {
     if [ "$(readlink -- "$2")" = "$1" ]; then
         return
     fi
-    sudo mkdir -p "$(dirname -- "$2")"
-    sudo ln -sT -- "$1" "$2"
+    $as_root mkdir -p "$(dirname -- "$2")"
+    $as_root ln -sT -- "$1" "$2"
 }
 
 install_link "$checkout/dotfiles.sh" /usr/local/bin/dotfiles
